@@ -1,3 +1,6 @@
+.idea/
+wx-cloud-kt.iml
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup

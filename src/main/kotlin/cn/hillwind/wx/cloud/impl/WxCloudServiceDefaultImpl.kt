@@ -142,13 +142,13 @@ class WxCloudServiceDefaultImpl(val wxMpService: WxMpService, val cloudPropertie
     }
 
     @Throws(WxErrorException::class)
-    operator fun get(url: String, queryParam: String?): String? {
+    private fun get(url: String, queryParam: String?): String? {
         return execute(Method.GET, url, queryParam)
     }
 
     @Throws(WxErrorException::class)
-    operator fun get(url: WxCloudApiUrl, queryParam: String?): String? {
-        return this[url.getUrl(), queryParam]
+    private fun get(url: WxCloudApiUrl, queryParam: String?): String? {
+        return this.get(url.getUrl(), queryParam)
     }
 
     @Throws(WxErrorException::class)

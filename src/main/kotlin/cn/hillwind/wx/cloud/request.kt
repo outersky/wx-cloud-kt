@@ -47,6 +47,42 @@ abstract class WxCloudResult : Serializable {
             if (!result.isSuccess()) throw WxErrorException(WxError.fromJson(json))
             return result
         }
+
+        @JvmStatic
+        fun main(args: Array<String>) {
+            genReflectionConfigJson()
+        }
+
+        // 生成 src/main/resources/META-INF/native-image/cn/hillwind/wx/cloud/reflection-config.json
+        private fun genReflectionConfigJson() {
+            val classes = listOf(WxCloudResult::class,
+                    WxCloudDbAddResult::class,
+                    WxCloudDbCountResult::class,
+                    WxCloudDbAddResult::class,
+                    WxCloudDbQueryResult::class,
+                    WxCloudDbUpdateResult::class,
+                    WxCloudStorageDeleteResult::class,
+                    WxCloudStorageDownloadResult::class,
+                    WxCloudStorageUploadResult::class,
+                    WxCloudFunctionInvokeResult::class
+            )
+
+            val folder = File("src/main/resources/META-INF/native-image/cn/hillwind/wx/cloud")
+            folder.mkdirs()
+            val text =
+                    "[" + classes.joinToString(",") {
+                        """
+                      {
+                        "name":"${it.qualifiedName}",
+                        "allDeclaredFields":true,
+                        "allDeclaredMethods":true,
+                        "allDeclaredConstructors":true,
+                        "allPublicMethods" : true
+                      }
+                """.trimIndent()
+                    } + "]"
+            text.byteInputStream().copyTo(File(folder, "reflection-config.json").outputStream())
+        }
     }
 }
 
